@@ -1,5 +1,7 @@
 # ESI-project-backend
 
+[![Heroku](https://pyheroku-badge.herokuapp.com/?app=esi-project-team-j&style=flat)](https://esi-project-team-j.herokuapp.com)
+
 ## PostgresSQL settings
 
 ```bash
