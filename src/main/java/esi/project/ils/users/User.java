@@ -10,6 +10,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private long id;
+    @Column(name = "email", unique = true)
+    private String email;
     @Column(name = "name")
     private String name;
     @Column(name = "password")
@@ -20,7 +22,8 @@ public class User {
     public User() {
     }
 
-    public User(String name, String password, String role) {
+    public User(String email, String name, String password, String role) {
+        this.email = email;
         this.name = name;
         this.password = password;
         this.role = role;
@@ -28,6 +31,7 @@ public class User {
 
     public User(User user) {
         this.id = user.getId();
+        this.email = user.getEmail();
         this.name = user.getName();
         this.password = user.getPassword();
         this.role = user.getRole();
@@ -39,6 +43,14 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {
