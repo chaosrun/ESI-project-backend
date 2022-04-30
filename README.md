@@ -14,6 +14,17 @@ postgres=# create user esi with encrypted password 'esi';
 postgres=# grant all privileges on database esidb to esi;
 ```
 
+## Users
+
+- Borrower
+    - Email: `borrower@example.com`
+    - Password: `QdSBhhujeH7ki2#X`
+    - Basic authentication base64 token: `Ym9ycm93ZXJAZXhhbXBsZS5jb206UWRTQmhodWplSDdraTIjWA==`
+- Librarian
+    - Email: `librarian@example.com`
+    - Password: `t4CvQm!R4SvRmzy$`
+    - Basic authentication base64 token: `bGlicmFyaWFuQGV4YW1wbGUuY29tOnQ0Q3ZRbSFSNFN2Um16eSQ=`
+
 ## References
 
 ### CI/CD
@@ -25,7 +36,16 @@ postgres=# grant all privileges on database esidb to esi;
 - [Deploy to Heroku with GitHub Actions](https://remarkablemark.org/blog/2021/03/12/github-actions-deploy-to-heroku/)
 - [The simplest way to include a Heroku badge in your README file](https://github.com/dhalenok/pyheroku-badge)
 
-## Database
+### Database
 
 - [How to fix "Error executing DDL "alter table events drop foreign key FKg0mkvgsqn8584qoql6a2rxheq" via JDBC Statement"](https://stackoverflow.com/a/56206827)
     - Changed `@Table(name = "user")` to `@Table(name = "users")` in `users/User.java`.
+- [TRUNCATE](https://www.postgresql.org/docs/current/sql-truncate.html)
+
+### Security
+
+- [Securing a Web Application](https://spring.io/guides/gs/securing-web/)
+- [Multiple markers at this line - The type NoOpPasswordEncoder is deprecated - The method getInstance() from the type NoOpPasswordEncoder is deprecated](https://stackoverflow.com/questions/52134823/multiple-markers-at-this-line-the-type-nooppasswordencoder-is-deprecated-the)
+- [4 Most Used REST API Authentication Methods](https://blog.restcase.com/4-most-used-rest-api-authentication-methods/)
+- [Basic Authentication](https://mixedanalytics.com/knowledge-base/api-connector-encode-credentials-to-base-64/)
+- [Java Code Examples for BCryptPasswordEncoder](https://www.tabnine.com/code/java/classes/org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder)
