@@ -48,3 +48,4 @@ gradle-app.setting
 # Additional files to ignore
 .DS_Store
 bin/
+.idea/
