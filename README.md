@@ -49,3 +49,4 @@ postgres=# grant all privileges on database esidb to esi;
 - [4 Most Used REST API Authentication Methods](https://blog.restcase.com/4-most-used-rest-api-authentication-methods/)
 - [Basic Authentication](https://mixedanalytics.com/knowledge-base/api-connector-encode-credentials-to-base-64/)
 - [Java Code Examples for BCryptPasswordEncoder](https://www.tabnine.com/code/java/classes/org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder)
+- [How to find out the currently logged-in user in Spring Boot?](https://stackoverflow.com/a/51944119)

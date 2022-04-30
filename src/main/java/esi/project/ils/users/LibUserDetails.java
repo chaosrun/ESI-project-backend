@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class LibUserDetails extends User implements UserDetails  {
 
-    private final User user;
+    private User user;
 
-    public LibUserDetails(final User user) {
+    public LibUserDetails(User user) {
         this.user = user;
     }
 
@@ -28,6 +28,16 @@ public class LibUserDetails extends User implements UserDetails  {
     @Override
     public String getUsername() {
         return user.getEmail();
+    }
+
+    @Override
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+    @Override
+    public String getName () {
+        return user.getName();
     }
 
     @Override
