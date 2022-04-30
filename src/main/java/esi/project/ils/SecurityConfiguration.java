@@ -14,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-
     @Autowired
     private UserDetailsService userDetailsService;
     
@@ -31,10 +29,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         
     @Override 
     protected void configure(HttpSecurity http) throws Exception{
-        http.httpBasic().and().cors().and().csrf().disable();
-        http.authorizeRequests()
+        http
+        .httpBasic()
+        .and()
+        .cors()
+        .and().csrf().disable()
+        .authorizeRequests()
+        .antMatchers("/me").hasAnyAuthority("ADMIN", "USER")
+        .antMatchers("/auth").authenticated()
         .antMatchers("/").permitAll()
         .and().formLogin().disable();
-    } 
+    }
 
 }

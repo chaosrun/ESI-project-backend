@@ -12,22 +12,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-public class SecController {
-    
+public class UserController {
+
+  @GetMapping("/authenticate")
+    public List<String> authenticate() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<String> roles = new ArrayList<>();
+
+        if (principal instanceof LibUserDetails) {
+            UserDetails details = (LibUserDetails) principal;
+            for (GrantedAuthority authority: details.getAuthorities())
+                roles.add(authority.getAuthority());
+        }
+
+        return roles;
+    }
+ 
     @GetMapping("/auth")
     public String authenticatedAPI(){
         return "Hi, you are authenticated";
-    }
-
-    @GetMapping("/authenticate") public List<String> authenticate() {
-        System.out.print("hi");
-        UserDetails userDetails = (LibUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.print(userDetails.getAuthorities());
-        List<String> roles = new ArrayList<>();
-        for (GrantedAuthority authority : userDetails.getAuthorities()) {
-            roles.add(authority.getAuthority());
-        }
-        return roles;
     }
 
 }
