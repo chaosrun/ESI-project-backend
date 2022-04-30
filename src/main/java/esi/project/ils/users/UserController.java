@@ -11,14 +11,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
-  @GetMapping("/authenticate")
+  @GetMapping("/auth")
     public List<String> authenticate() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<String> roles = new ArrayList<>();
@@ -30,11 +32,6 @@ public class UserController {
         }
 
         return roles;
-    }
- 
-    @GetMapping("/auth")
-    public String authenticatedAPI(){
-        return "Hi, you are authenticated";
     }
 
     @GetMapping("/me")
