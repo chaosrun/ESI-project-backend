@@ -1,6 +1,6 @@
 # ESI Project Backend - Team J
 
-[![Heroku](https://pyheroku-badge.herokuapp.com/?app=esi-project-team-j&style=flat)](https://esi-project-team-j.herokuapp.com)
+[![Deploy](https://github.com/chaosrun/ESI-project-backend/actions/workflows/heroku-deploy.yml/badge.svg)](https://github.com/chaosrun/ESI-project-backend/actions/workflows/heroku-deploy.yml) [![Heroku](https://pyheroku-badge.herokuapp.com/?app=esi-project-team-j&style=flat)](https://esi-project-team-j.herokuapp.com) 
 
 ## PostgresSQL settings
 
