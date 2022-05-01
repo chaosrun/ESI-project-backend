@@ -17,6 +17,8 @@ jobs:
           POSTGRES_USER: esi
           POSTGRES_PASSWORD: esi
           POSTGRES_DB: esidb
+        ports:
+          - 5432/tcp
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
