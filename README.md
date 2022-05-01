@@ -26,6 +26,12 @@ postgres=# grant all privileges on database esidb to esi;
     - Basic authentication base64 token: `bGlicmFyaWFuQGV4YW1wbGUuY29tOnQ0Q3ZRbSFSNFN2Um16eSQ=`
 - Authorization: Basic Auth
 
+Test:
+
+```bash
+curl "https://esi-project-team-j.herokuapp.com/user/me" -u "borrower@example.com:QdSBhhujeH7ki2#X"
+```
+
 ## Routes
 
 | URI        | HTTP Verb | Description                          |
