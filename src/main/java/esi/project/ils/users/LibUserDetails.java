@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class LibUserDetails extends User implements UserDetails  {
 
-    private final User user;
+    private User user;
 
-    public LibUserDetails(final User user) {
+    public LibUserDetails(User user) {
         this.user = user;
     }
 

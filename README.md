@@ -24,6 +24,14 @@ postgres=# grant all privileges on database esidb to esi;
     - Email: `librarian@example.com`
     - Password: `t4CvQm!R4SvRmzy$`
     - Basic authentication base64 token: `bGlicmFyaWFuQGV4YW1wbGUuY29tOnQ0Q3ZRbSFSNFN2Um16eSQ=`
+- Authorization: Basic Auth
+
+## Routes
+
+| URI        | HTTP Verb | Description                          |
+|------------|-----------|--------------------------------------|
+| /user/auth | GET       | Return roles list                    |
+| /user/me   | GET       | Return user's email address and name |
 
 ## References
 
@@ -36,6 +44,7 @@ postgres=# grant all privileges on database esidb to esi;
 - [Deploy to Heroku with GitHub Actions](https://remarkablemark.org/blog/2021/03/12/github-actions-deploy-to-heroku/)
 - [The simplest way to include a Heroku badge in your README file](https://github.com/dhalenok/pyheroku-badge)
 - [Stop GitHub Jobs in Progress if Another Failed (stop on fail)](https://stackoverflow.com/questions/67488957/stop-github-jobs-in-progress-if-another-failed-stop-on-fail)
+- [Creating PostgreSQL service containers](https://docs.github.com/en/actions/using-containerized-services/creating-postgresql-service-containers)
 
 ### Database
 
