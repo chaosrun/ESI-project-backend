@@ -35,6 +35,7 @@ postgres=# grant all privileges on database esidb to esi;
 - [Create Java Spring API with VSCODE & Postgres: 0 to Deploy ](https://dev.to/alexmercedcoder/create-java-spring-api-with-vscode-postgres-0-to-deploy-142)
 - [Deploy to Heroku with GitHub Actions](https://remarkablemark.org/blog/2021/03/12/github-actions-deploy-to-heroku/)
 - [The simplest way to include a Heroku badge in your README file](https://github.com/dhalenok/pyheroku-badge)
+- [Stop GitHub Jobs in Progress if Another Failed (stop on fail)](https://stackoverflow.com/questions/67488957/stop-github-jobs-in-progress-if-another-failed-stop-on-fail)
 
 ### Database
 
