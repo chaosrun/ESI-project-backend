@@ -36,7 +36,7 @@ curl "https://esi-project-team-j.herokuapp.com/auth" -u "borrower@example.com:Qd
 
 | URI   | HTTP Verb | Description                                           |
 |-------|-----------|-------------------------------------------------------|
-| /auth | GET       | Return authenticated user details, including the role |
+| /auth | GET       | Return the authenticated user details, including the role |
 
 ## References
 
