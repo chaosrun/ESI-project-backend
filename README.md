@@ -29,15 +29,14 @@ postgres=# grant all privileges on database esidb to esi;
 Test:
 
 ```bash
-curl "https://esi-project-team-j.herokuapp.com/user/me" -u "borrower@example.com:QdSBhhujeH7ki2#X"
+curl "https://esi-project-team-j.herokuapp.com/auth" -u "borrower@example.com:QdSBhhujeH7ki2#X"
 ```
 
 ## Routes
 
-| URI        | HTTP Verb | Description                          |
-|------------|-----------|--------------------------------------|
-| /user/auth | GET       | Return roles list                    |
-| /user/me   | GET       | Return user's email address and name |
+| URI   | HTTP Verb | Description                                           |
+|-------|-----------|-------------------------------------------------------|
+| /auth | GET       | Return authenticated user details, including the role |
 
 ## References
 
