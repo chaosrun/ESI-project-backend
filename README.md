@@ -34,9 +34,27 @@ curl "https://esi-project-team-j.herokuapp.com/auth" -u "borrower@example.com:Qd
 
 ## Routes
 
-| URI   | HTTP Verb | Description                                           |
-|-------|-----------|-------------------------------------------------------|
+| URI   | HTTP Verb | Description                                               |
+|-------|-----------|-----------------------------------------------------------|
 | /auth | GET       | Return the authenticated user details, including the role |
+
+## Git workflow examples
+
+Work on the feature branch:
+
+```bash
+git checkout -b feature_1
+```
+
+After coding, make sure the feature branch is up to date before create a pull request:
+
+```bash
+git checkout main
+git pull
+git checkout feature_branch
+git rebase main
+git push
+```
 
 ## References
 
@@ -65,3 +83,9 @@ curl "https://esi-project-team-j.herokuapp.com/auth" -u "borrower@example.com:Qd
 - [Basic Authentication](https://mixedanalytics.com/knowledge-base/api-connector-encode-credentials-to-base-64/)
 - [Java Code Examples for BCryptPasswordEncoder](https://www.tabnine.com/code/java/classes/org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder)
 - [How to find out the currently logged-in user in Spring Boot?](https://stackoverflow.com/a/51944119)
+
+## Git
+
+- [Merge Master into Branch before making new PR](https://www.reddit.com/r/git/comments/je457m/merge_master_into_branch_before_making_new_pr/)
+- [VSTS: how to require a branch to be up to date before merging (doing pull request) from that branch?](https://stackoverflow.com/questions/64029333/vsts-how-to-require-a-branch-to-be-up-to-date-before-merging-doing-pull-reques)
+- [Recommended git workflow](https://docs.gpcrdb.org/git_workflow.html)
