@@ -1,21 +1,35 @@
 package esi.project.ils.users;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private int id;
+
+    @NotNull
+    @NotBlank
+    @Email
     @Column(name = "email", unique = true)
     private String email;
+
+    @NotBlank
     @Column(name = "name")
     private String name;
+
+    @NotBlank
     @Column(name = "password")
     private String password;
+
+    @NotBlank
+    @NotNull
     @Column(name = "role")
     private String role;
 
