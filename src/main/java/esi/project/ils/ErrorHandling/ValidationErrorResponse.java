@@ -1,4 +1,4 @@
-package esi.project.ils;
+package esi.project.ils.ErrorHandling;
 
 import java.util.ArrayList;
 import java.util.List;
