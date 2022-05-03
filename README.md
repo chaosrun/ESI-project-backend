@@ -4,6 +4,16 @@
 
 ## PostgresSQL settings
 
+In order to keep the GitHub Actions jobs passing, please make sure that the following variables are set in `application-default.properties`:
+
+```
+spring.datasource.url = jdbc:postgresql://localhost:5432/esidb
+spring.datasource.username = esi
+spring.datasource.password = esi
+```
+
+You can create the database with the following command:
+
 ```bash
 sudo -u postgres psql
 ```
