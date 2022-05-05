@@ -3,11 +3,13 @@ package esi.project.ils.users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import javax.validation.Valid;
 import java.util.List;
@@ -33,9 +35,18 @@ public class UserController {
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
-    @RequestMapping("/users/{id}")
-    public ResponseEntity<User> getUser(@PathVariable String id) {
-        Optional<User> user = userService.getUserWithId(Integer.parseInt(id));
+    @RequestMapping("/user")
+    public ResponseEntity<User> getUser(@RequestParam(required = false, name = "email") String email,
+            @RequestParam(required = false, name = "user_id") String user_id) {
+
+        Optional<User> user = null;
+        if (!StringUtils.isEmpty(email)) {
+            user = userService.getUserWithEmail(email);
+        }
+        if (!StringUtils.isEmpty(user_id)) {
+            user = userService.getUserWithId(Integer.parseInt(user_id));
+        }
+
         if (user.isPresent()) {
             return new ResponseEntity<>(user.get(), HttpStatus.OK);
         }
@@ -51,9 +62,16 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/users/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable String id) {
-        userService.deleteUser(Integer.parseInt(id));
+    @RequestMapping(method = RequestMethod.DELETE, value = "/user")
+    public ResponseEntity<User> deleteUser(@RequestParam(required = false, name = "email") String email,
+            @RequestParam(required = false, name = "user_id") String user_id) {
+
+        if (!StringUtils.isEmpty(email)) {
+            userService.deleteUserWithEmail(email);
+        }
+        if (!StringUtils.isEmpty(user_id)) {
+            userService.deleteUserWithId(Integer.parseInt(user_id));
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
