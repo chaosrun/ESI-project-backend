@@ -32,7 +32,7 @@ Work on your feature branch:
 git checkout -b feature_branch_name
 ```
 
-Please make sure that your feature branch is up to date with the latest changes in main, before you create a pull request:
+Please make sure that your feature branch is up to date with the latest changes in main before you create a pull request. You can choose to rebase or merge. If you have a public feature branch (already pushed and will collaborate with others on this feature branch), you may use merge instead, but here we take rebase as an example:
 
 ```bash
 git checkout main
@@ -42,7 +42,20 @@ git rebase main
 git push
 ```
 
-During this process, you may need to resolve conflicts in your feature branch.
+The rebase will usually go through without issues, but if git can not merge the changes automatically, a merge conflict will arise. If this happens, you can edit the files manually to resolve the conflicts. Then add files to the index, and continue the rebase:
+
+```bash
+git add path/to/file
+git rebase --continue
+```
+
+You may need to use force update if you already pushed this feature branch to GitHub:
+
+```bash
+git push --force-with-lease
+```
+
+Further reading: [Resolving merge conflicts](https://docs.openstack.org/doc-contrib-guide/additional-git-workflow/rebase.html)
 
 ## Users
 
@@ -101,3 +114,6 @@ curl "https://esi-project-team-j.herokuapp.com/auth" -u "borrower@example.com:Qd
 - [Merge Master into Branch before making new PR](https://www.reddit.com/r/git/comments/je457m/merge_master_into_branch_before_making_new_pr/)
 - [VSTS: how to require a branch to be up to date before merging (doing pull request) from that branch?](https://stackoverflow.com/questions/64029333/vsts-how-to-require-a-branch-to-be-up-to-date-before-merging-doing-pull-reques)
 - [Recommended git workflow](https://docs.gpcrdb.org/git_workflow.html)
+- [About protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/defining-the-mergeability-of-pull-requests/about-protected-branches)
+- [Git Branching - Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)
+- [Merging vs. Rebasing](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
