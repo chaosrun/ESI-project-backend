@@ -26,6 +26,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Optional<User> getUserWithEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public Optional<User> updateUser(int id, User updatedUserInformation) {
         return userRepository.findById(id).map(user -> {
             user.setName(updatedUserInformation.getName());
@@ -36,7 +40,11 @@ public class UserService {
         });
     }
 
-    public void deleteUser(int id) {
+    public void deleteUserWithId(int id) {
         userRepository.deleteById(id);
+    }
+
+    public void deleteUserWithEmail(String email) {
+        userRepository.deleteByEmail(email);
     }
 }
