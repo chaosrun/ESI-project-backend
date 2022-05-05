@@ -1,4 +1,8 @@
-package esi.project.ils;
+package esi.project.ils.ErrorHandling;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class ErrorHandlingControllerAdvice {
@@ -18,22 +23,46 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
-        ValidationErrorResponse error = new ValidationErrorResponse();
+        List<Violation> error = new ArrayList<>();
         for (ConstraintViolation violation : e.getConstraintViolations()) {
-            error.getViolations().add(new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
+            error.add(new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
         }
-        return error;
+
+        ValidationErrorResponse response = new ValidationErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                error);
+
+        return response;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     ValidationErrorResponse onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        ValidationErrorResponse error = new ValidationErrorResponse();
+        List<Violation> error = new ArrayList<>();
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            error.getViolations().add(new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
+            error.add(new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
         }
-        return error;
+
+        ValidationErrorResponse response = new ValidationErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                error);
+
+        return response;
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    ErrorMessage globalExceptionHandler(Exception ex, WebRequest request) {
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                new Date(),
+                ex.getMessage());
+
+        return message;
     }
 
 }
