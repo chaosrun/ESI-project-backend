@@ -24,6 +24,26 @@ postgres=# create user esi with encrypted password 'esi';
 postgres=# grant all privileges on database esidb to esi;
 ```
 
+## Git workflow example
+
+Work on your feature branch:
+
+```bash
+git checkout -b feature_branch_name
+```
+
+Please make sure that your feature branch is up to date with the latest changes in main, before you create a pull request:
+
+```bash
+git checkout main
+git pull
+git checkout feature_branch_name
+git rebase main
+git push
+```
+
+During this process, you may need to resolve conflicts in your feature branch.
+
 ## Users
 
 - Borrower
@@ -47,24 +67,6 @@ curl "https://esi-project-team-j.herokuapp.com/auth" -u "borrower@example.com:Qd
 | URI   | HTTP Verb | Description                                               |
 |-------|-----------|-----------------------------------------------------------|
 | /auth | GET       | Return the authenticated user details, including the role |
-
-## Git workflow examples
-
-Work on the feature branch:
-
-```bash
-git checkout -b feature_1
-```
-
-After coding, make sure the feature branch is up to date before create a pull request:
-
-```bash
-git checkout main
-git pull
-git checkout feature_branch
-git rebase main
-git push
-```
 
 ## References
 
