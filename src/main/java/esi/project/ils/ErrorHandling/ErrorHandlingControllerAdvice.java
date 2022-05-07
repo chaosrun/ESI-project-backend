@@ -24,16 +24,15 @@ public class ErrorHandlingControllerAdvice {
     @ResponseBody
     ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
         List<Violation> error = new ArrayList<>();
+
         for (ConstraintViolation violation : e.getConstraintViolations()) {
             error.add(new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
         }
 
-        ValidationErrorResponse response = new ValidationErrorResponse(
+        return new ValidationErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
                 error);
-
-        return response;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -41,28 +40,25 @@ public class ErrorHandlingControllerAdvice {
     @ResponseBody
     ValidationErrorResponse onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<Violation> error = new ArrayList<>();
+
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
             error.add(new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
         }
 
-        ValidationErrorResponse response = new ValidationErrorResponse(
+        return new ValidationErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
                 error);
-
-        return response;
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    ErrorMessage globalExceptionHandler(Exception ex, WebRequest request) {
-        ErrorMessage message = new ErrorMessage(
+    ErrorMessage globalExceptionHandler(Exception ex) {
+        return new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 new Date(),
                 ex.getMessage());
-
-        return message;
     }
 
 }
