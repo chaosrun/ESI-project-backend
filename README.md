@@ -19,9 +19,9 @@ sudo -u postgres psql
 ```
 
 ```sql
-postgres=# create database esidb;
-postgres=# create user esi with encrypted password 'esi';
-postgres=# grant all privileges on database esidb to esi;
+create database esidb;
+create user esi with encrypted password 'esi';
+grant all privileges on database esidb to esi;
 ```
 
 ## Git workflow example
@@ -99,6 +99,8 @@ curl "https://esi-project-team-j.herokuapp.com/auth" -u "borrower@example.com:Qd
 - [How to fix "Error executing DDL "alter table events drop foreign key FKg0mkvgsqn8584qoql6a2rxheq" via JDBC Statement"](https://stackoverflow.com/a/56206827)
     - Changed `@Table(name = "user")` to `@Table(name = "users")` in `users/User.java`.
 - [TRUNCATE](https://www.postgresql.org/docs/current/sql-truncate.html)
+- [Spring Boot Data JPA with H2 and data.sql - Table not Found](https://stackoverflow.com/questions/67744719/spring-boot-data-jpa-with-h2-and-data-sql-table-not-found)
+- [Entity Class name is transformed into SQL table name with underscores](https://stackoverflow.com/questions/29087626/entity-class-name-is-transformed-into-sql-table-name-with-underscores)
 
 ### Security
 

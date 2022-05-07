@@ -14,7 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Material {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "material_id")
     private int id;
 
@@ -30,21 +30,21 @@ public class Material {
 
     @NotBlank
     @NotNull
-    @Column(name = "callNumber", unique = true)
+    @Column(name = "call_number", unique = true)
     private String callNumber;
 
     @NotNull
-    @Column(name = "publishedAt")
+    @Column(name = "published_at")
     private Date publishedAt;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private Date createdAt;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private Date updatedAt;
 
     public Material() {
