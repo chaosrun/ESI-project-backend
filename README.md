@@ -75,12 +75,6 @@ Test:
 curl "https://esi-project-team-j.herokuapp.com/auth" -u "borrower@example.com:QdSBhhujeH7ki2#X"
 ```
 
-## Routes
-
-| URI   | HTTP Verb | Description                                               |
-|-------|-----------|-----------------------------------------------------------|
-| /auth | GET       | Return the authenticated user details, including the role |
-
 ## References
 
 ### CI/CD
