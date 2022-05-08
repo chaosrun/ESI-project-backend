@@ -1,14 +1,13 @@
 package esi.project.ils.reservations;
 
-import java.util.Date;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -29,12 +28,28 @@ public class Reservation {
     @NotNull
     @NotBlank
     @Column(name = "start_date")
-    private String start_date;
+    private String startDate;
+
+    public String getStartDate() {
+        return this.startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
 
     @NotNull
     @NotBlank
     @Column(name = "end_date")
-    private String end_date;
+    private String endDate;
+
+    public String getEndDate() {
+        return this.endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
     @NotNull
     @NotBlank
@@ -42,42 +57,40 @@ public class Reservation {
     private String status;
 
    
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="user_id",referencedColumnName="user_id",nullable = false)
     private User user;
 
-    
-
-    @ManyToOne
-    private Material material;
-
-
     public User getUser() {
-        return this.user;
+        return user;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
+    
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "material_id", referencedColumnName = "material_id", nullable = false)
+    private Material material;
 
     public Material getMaterial() {
-        return this.material;
+        return material;
     }
 
     public void setMaterial(Material material) {
         this.material = material;
     }
 
+
     public Reservation() {
         
     }
 
-    public Reservation(int id, @NotNull @NotBlank String start_date, @NotNull @NotBlank String end_date,String status, Integer user_id,Integer material_id) {
+    public Reservation(int id, @NotNull @NotBlank String startDate, @NotNull @NotBlank String endDate,String status) {
         this.id = id;
-        this.start_date = start_date;
-        this.end_date = end_date;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.status = status;
-        this.user = new User(user_id,"","","","");
-        this.material = new Material(material_id,"","","","","");
 
     }
 
@@ -87,24 +100,6 @@ public class Reservation {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getStart_date() {
-        return this.start_date;
-    }
-
-    public void setStart_date(String start_date) {
-        this.start_date = start_date;
-    }
-
-    
-
-    public String getEnd_date() {
-        return this.end_date;
-    }
-
-    public void setEnd_date(String end_date) {
-        this.end_date = end_date;
     }
 
     public String getStatus() {

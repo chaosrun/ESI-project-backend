@@ -11,7 +11,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     public List<Reservation> findByStatus(String status);
     public List<Reservation> findByMaterialId(int material_id);
 
-    public List<Reservation> findByLoanPeriod(String start_date,String end_date);
+    public List<Reservation> findByStartDateAndEndDate(String start_date,String end_date);
 
     
 }

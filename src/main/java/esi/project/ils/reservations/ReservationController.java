@@ -22,6 +22,8 @@ public class ReservationController {
 
     @PostMapping("/reservations")
     public ResponseEntity<Reservation> addResponseEntity(@Valid @RequestBody Reservation reservation) {
+        System.out.println(reservation.getUser());
+        System.out.println(reservation.getMaterial());
         Reservation newReservation = reservationService.addReservation(reservation);
         return new ResponseEntity<>(newReservation, HttpStatus.CREATED);
     }
@@ -51,8 +53,9 @@ public class ReservationController {
 
 
     @RequestMapping(method = RequestMethod.PUT, value = "/reservation/{reservation_id}")
-    public ResponseEntity<Reservation> updateReservation(@RequestBody Reservation reservation, @PathVariable String resrvation_id) {
-        Optional<Reservation> result = reservationService.updateReservation(Integer.parseInt(resrvation_id), reservation);
+    public ResponseEntity<Reservation> updateReservation(@RequestBody Reservation reservation, @PathVariable String reservation_id) {
+        Optional<Reservation> result = reservationService.updateReservation(Integer.parseInt(
+                reservation_id), reservation);
         if (result.isPresent()) {
             return new ResponseEntity<>(result.get(), HttpStatus.OK);
         }
@@ -79,9 +82,9 @@ public class ReservationController {
     }
 
 
-    @RequestMapping("/reservations/material/{matrial_id}")
+    @RequestMapping("/reservations/material/{material_id}")
     public ResponseEntity<List<Reservation>> getReservationByMaterialId(@PathVariable String material_id) {
-        List<Reservation> reservationList = reservationService.getReservationByMatrialId(Integer.parseInt(material_id));
+        List<Reservation> reservationList = reservationService.getReservationByMaterialId(Integer.parseInt(material_id));
 
         if (reservationList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -91,7 +94,7 @@ public class ReservationController {
 
     @RequestMapping("/reservations/start/{loan_start_date}/end/{loan_end_date}")
     public ResponseEntity<List<Reservation>> getReservationByLoanPeriod(@PathVariable String loan_start_date,@PathVariable String loan_end_date) {
-        List<Reservation> reservationList = reservationService.getReservationByLoanPeriod(
+        List<Reservation> reservationList = reservationService.getReservationByStartDateAndEndDate(
                 loan_start_date,loan_end_date);
 
         if (reservationList.isEmpty()) {
