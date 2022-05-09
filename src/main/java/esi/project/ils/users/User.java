@@ -116,4 +116,5 @@ public class User {
     public void setLoanRequests(Set<LoanRequest> loanRequests) {
         this.loanRequests = loanRequests;
     }
+
 }
