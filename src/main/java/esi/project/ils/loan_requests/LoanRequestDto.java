@@ -1,6 +1,4 @@
-package esi.project.ils.requests;
-
-import esi.project.ils.users.User;
+package esi.project.ils.loan_requests;
 
 import java.util.Date;
 

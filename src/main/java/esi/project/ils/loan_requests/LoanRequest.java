@@ -1,4 +1,4 @@
-package esi.project.ils.requests;
+package esi.project.ils.loan_requests;
 
 import esi.project.ils.materials.Material;
 import esi.project.ils.users.User;

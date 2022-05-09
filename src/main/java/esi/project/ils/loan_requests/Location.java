@@ -1,4 +1,4 @@
-package esi.project.ils.requests;
+package esi.project.ils.loan_requests;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

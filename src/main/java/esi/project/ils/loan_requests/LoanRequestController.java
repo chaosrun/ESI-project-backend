@@ -1,4 +1,4 @@
-package esi.project.ils.requests;
+package esi.project.ils.loan_requests;
 
 import javax.validation.Valid;
 import java.util.Optional;
