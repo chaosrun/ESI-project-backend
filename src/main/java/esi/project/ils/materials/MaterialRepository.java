@@ -13,5 +13,7 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
 
     List<Material> findByAuthorContaining(@Param("author") String author);
 
+    List<Material> findByTypeContaining(@Param("type") String type);
+
     Optional<Material> findByCallNumber(String call_number);
 }

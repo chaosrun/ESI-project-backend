@@ -30,6 +30,10 @@ public class MaterialService {
         return materialRepository.findByTitleContaining(title);
     }
 
+    public List<Material> getMaterialWithType(String type) {
+        return materialRepository.findByTypeContaining(type);
+    }
+
     public List<Material> getMaterialWithAuthor(String author) {
         return materialRepository.findByAuthorContaining(author);
     }
