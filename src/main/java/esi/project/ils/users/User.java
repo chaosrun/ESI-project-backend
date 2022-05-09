@@ -1,12 +1,14 @@
 package esi.project.ils.users;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import esi.project.ils.loan_requests.LoanRequest;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -47,6 +49,9 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<LoanRequest> loanRequests;
 
     public int getId() {
         return this.id;
@@ -104,14 +109,12 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public User() {
+    public Set<LoanRequest> getLoanRequests() {
+        return loanRequests;
     }
 
-    public User(User user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.name = user.getName();
-        this.password = user.getPassword();
-        this.role = user.getRole();
+    public void setLoanRequests(Set<LoanRequest> loanRequests) {
+        this.loanRequests = loanRequests;
     }
+
 }
