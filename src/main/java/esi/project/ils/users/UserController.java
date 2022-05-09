@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/users")
+    @PostMapping("/user")
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
         User newUser = userService.addUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
@@ -27,6 +27,17 @@ public class UserController {
     @RequestMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> userList = userService.getAllUsers();
+        if (userList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
+    @RequestMapping("/users/role/{role}")
+    public ResponseEntity<List<User>> getUsersByRole(@PathVariable String role) {
+
+        List<User> userList = userService.getUsersWithRole(role);
+
         if (userList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

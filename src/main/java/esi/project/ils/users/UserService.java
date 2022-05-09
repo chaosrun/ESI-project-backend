@@ -1,6 +1,7 @@
 package esi.project.ils.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +14,20 @@ public class UserService {
     private UserRepository userRepository;
 
     public User addUser(User user) {
+        String password = user.getPassword();
+        String hashedPassword = new BCryptPasswordEncoder().encode(password);
+        user.setPassword(hashedPassword);
         return userRepository.save(user);
     }
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
+
         return users;
     }
+
+    public List<User> getUsersWithRole(String role) { return userRepository.findByRole(role); }
 
     public Optional<User> getUserWithId(int id) {
         return userRepository.findById(id);
