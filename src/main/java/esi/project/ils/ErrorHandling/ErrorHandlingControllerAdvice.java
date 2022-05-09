@@ -8,6 +8,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -57,6 +58,16 @@ public class ErrorHandlingControllerAdvice {
     ErrorMessage resourceNotFoundExceptionHandler(Exception ex) {
         return new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
+                new Date(),
+                ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    ErrorMessage accessDeniedExceptionHandler(Exception ex) {
+        return new ErrorMessage(
+                HttpStatus.FORBIDDEN.value(),
                 new Date(),
                 ex.getMessage());
     }

@@ -2,6 +2,7 @@ package esi.project.ils.loan_requests;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +38,7 @@ public class LoanRequestController {
 
     @PostMapping("/request/loan")
     public ResponseEntity<LoanRequestDto> addLoanRequest(@Valid @RequestBody LoanRequestForm loanRequestForm,
-                                                      @AuthenticationPrincipal LibUserDetails user) {
+                                                         @AuthenticationPrincipal LibUserDetails user) {
         Location newLocation = new Location();
         newLocation.setAddress(loanRequestForm.getAddress());
         newLocation.setCity(loanRequestForm.getCity());
@@ -67,17 +69,48 @@ public class LoanRequestController {
                 HttpStatus.CREATED);
     }
 
+    public void checkAuthorization(int request_id, LoanRequest loanRequest, LibUserDetails user) {
+        Optional<LoanRequest> oldLoanRequest = loanRequestService.getLoanRequest(request_id);
+
+        if (oldLoanRequest.isEmpty()) {
+            throw new ResourceNotFoundException("Loan request not found with id " + request_id);
+        }
+
+        Optional<User> createdBy = userService.getUserWithId(user.getId());
+
+        if (createdBy.isEmpty()) {
+            throw new ResourceNotFoundException("User not found with id " + user.getId());
+        }
+
+        String role = createdBy.get().getRole();
+
+        if (loanRequest != null
+                && !Objects.equals(role, "LIBRARIAN")
+                && !(oldLoanRequest.get().getUser().getId() == user.getId()
+                && oldLoanRequest.get().getStatus().equals("REQUESTED")
+                && loanRequest.getStatus().equals("CANCELLED"))) {
+            throw new AccessDeniedException("You are not allowed to update this loan request");
+        }
+
+        if (loanRequest == null
+                && !Objects.equals(role, "LIBRARIAN")) {
+            throw new AccessDeniedException("You are not allowed to delete this loan request");
+        }
+    }
+
     @PutMapping("/request/loan/{request_id}")
     public ResponseEntity<LoanRequestDto> updateLoanRequest(@PathVariable int request_id,
-                                                         @RequestBody LoanRequest loanRequest) {
-        Optional<LoanRequest> result = loanRequestService.updateLoanRequest(request_id, loanRequest);
-        return result.map(
-                request -> new ResponseEntity<>(modelMapper.map(request, LoanRequestDto.class), HttpStatus.OK))
-                .orElseThrow(() -> new ResourceNotFoundException("Loan request not found with id " + request_id));
+                                                            @RequestBody LoanRequest loanRequest,
+                                                            @AuthenticationPrincipal LibUserDetails user) {
+        checkAuthorization(request_id, loanRequest, user);
+        Optional<LoanRequest> newLoanRequest = loanRequestService.updateLoanRequest(request_id, loanRequest);
+        return new ResponseEntity<>(modelMapper.map(newLoanRequest, LoanRequestDto.class), HttpStatus.OK);
     }
 
     @DeleteMapping("/request/loan/{request_id}")
-    public ResponseEntity<LoanRequest> deleteLoanRequest(@PathVariable int request_id) {
+    public ResponseEntity<LoanRequest> deleteLoanRequest(@PathVariable int request_id,
+                                                         @AuthenticationPrincipal LibUserDetails user) {
+        checkAuthorization(request_id, null, user);
         loanRequestService.deleteLoanRequest(request_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
