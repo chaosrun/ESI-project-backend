@@ -23,6 +23,7 @@ public class SecController {
         result.put("email", user.getEmail());
         result.put("name", user.getName());
         result.put("role", user.getAuthorities().get(0).getAuthority());
+        result.put("library", user.getHomeLibrary());
 
         return result;
     }
