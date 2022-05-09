@@ -38,6 +38,11 @@ public class Material {
 
     @NotBlank
     @NotNull
+    @Column(name = "type")
+    private String type;
+
+    @NotBlank
+    @NotNull
     @Column(name = "call_number", unique = true)
     private String callNumber;
 
@@ -83,6 +88,14 @@ public class Material {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getAuthor() {
