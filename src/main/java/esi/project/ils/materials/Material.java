@@ -61,20 +61,20 @@ public class Material {
     @OneToMany(mappedBy = "material", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ExtensionRequest> extensionRequests;
 
-    public String getHomeLibrary() {
-        return homeLibrary;
-    }
-
-    public void setHomeLibrary(String homeLibrary) {
-        this.homeLibrary = homeLibrary;
-    }
-
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getHomeLibrary() {
+        return homeLibrary;
+    }
+
+    public void setHomeLibrary(String homeLibrary) {
+        this.homeLibrary = homeLibrary;
     }
 
     public String getTitle() {
