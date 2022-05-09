@@ -19,8 +19,11 @@ public class UserService {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
+
         return users;
     }
+
+    public List<User> getUsersWithRole(String role) { return userRepository.findByRole(role); }
 
     public Optional<User> getUserWithId(int id) {
         return userRepository.findById(id);

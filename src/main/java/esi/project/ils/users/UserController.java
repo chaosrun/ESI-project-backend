@@ -33,6 +33,17 @@ public class UserController {
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
+    @RequestMapping("/users/role/{role}")
+    public ResponseEntity<List<User>> getUsersByRole(@PathVariable String role) {
+
+        List<User> userList = userService.getUsersWithRole(role);
+
+        if (userList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
     @RequestMapping("/user/{user_id}")
     public ResponseEntity<User> getUserById(@PathVariable String user_id) {
 
