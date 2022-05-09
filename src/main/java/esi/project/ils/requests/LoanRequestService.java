@@ -21,6 +21,10 @@ public class LoanRequestService {
         });
     }
 
+    public Optional<LoanRequest> getLoanRequest(int id) {
+        return loanRequestRepository.findById(id);
+    }
+
     public void deleteLoanRequest(int id) {
         loanRequestRepository.deleteById(id);
     }

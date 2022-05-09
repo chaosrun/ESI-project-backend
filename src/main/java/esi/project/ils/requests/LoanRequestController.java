@@ -45,4 +45,10 @@ public class LoanRequestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/request/loan/{request_id}")
+    public ResponseEntity<LoanRequest> getLoanRequest(@PathVariable int request_id) {
+        Optional<LoanRequest> result = loanRequestService.getLoanRequest(request_id);
+        return result.map(loanRequest -> new ResponseEntity<>(loanRequest, HttpStatus.OK))
+                .orElseThrow(() -> new ResourceNotFoundException("Loan request not found with id " + request_id));
+    }
 }
