@@ -1,11 +1,12 @@
 package esi.project.ils.requests;
 
+import javax.validation.Valid;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
@@ -29,4 +30,11 @@ public class LoanRequestController {
         return new ResponseEntity<>(loanRequestService.addLoanRequest(newLoanRequest), HttpStatus.CREATED);
     }
 
+    @PutMapping("/request/loan/{request_id}")
+    public ResponseEntity<LoanRequest> updateLoanRequest(@PathVariable int request_id,
+                                                         @RequestBody LoanRequest loanRequest) {
+        Optional<LoanRequest> result = loanRequestService.updateLoanRequest(request_id, loanRequest);
+        return result.map(request -> new ResponseEntity<>(request, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
 }
