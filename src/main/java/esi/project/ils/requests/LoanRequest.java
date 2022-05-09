@@ -5,6 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -16,11 +17,11 @@ public class LoanRequest {
     @Column(name = "request_id")
     private int id;
 
-    @NotBlank
+    @NotNull
     @Column(name = "start_date")
     private Date startDate;
 
-    @NotBlank
+    @NotNull
     @Column(name = "end_date")
     private Date endDate;
 
