@@ -12,8 +12,10 @@ public class LoanRequestDto {
     private String locationAddress;
     private String locationCity;
     private String locationZipCode;
+    private String userHomeLibrary;
     private String userName;
     private String userEmail;
+    private String materialHomeLibrary;
     private String materialTitle;
     private String materialAuthor;
     private String materialCallNumber;
@@ -91,6 +93,14 @@ public class LoanRequestDto {
         this.locationZipCode = locationZipCode;
     }
 
+    public String getUserHomeLibrary() {
+        return userHomeLibrary;
+    }
+
+    public void setUserHomeLibrary(String userHomeLibrary) {
+        this.userHomeLibrary = userHomeLibrary;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -105,6 +115,14 @@ public class LoanRequestDto {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getMaterialHomeLibrary() {
+        return materialHomeLibrary;
+    }
+
+    public void setMaterialHomeLibrary(String materialHomeLibrary) {
+        this.materialHomeLibrary = materialHomeLibrary;
     }
 
     public String getMaterialTitle() {
