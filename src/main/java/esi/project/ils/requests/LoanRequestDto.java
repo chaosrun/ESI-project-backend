@@ -16,6 +16,10 @@ public class LoanRequestDto {
     private String locationZipCode;
     private String userName;
     private String userEmail;
+    private String materialTitle;
+    private String materialAuthor;
+    private String materialCallNumber;
+    private String materialPublishedAt;
 
     public int getId() {
         return id;
@@ -105,4 +109,35 @@ public class LoanRequestDto {
         this.userEmail = userEmail;
     }
 
+    public String getMaterialTitle() {
+        return materialTitle;
+    }
+
+    public void setMaterialTitle(String materialTitle) {
+        this.materialTitle = materialTitle;
+    }
+
+    public String getMaterialAuthor() {
+        return materialAuthor;
+    }
+
+    public void setMaterialAuthor(String materialAuthor) {
+        this.materialAuthor = materialAuthor;
+    }
+
+    public String getMaterialCallNumber() {
+        return materialCallNumber;
+    }
+
+    public void setMaterialCallNumber(String materialCallNumber) {
+        this.materialCallNumber = materialCallNumber;
+    }
+
+    public String getMaterialPublishedAt() {
+        return materialPublishedAt;
+    }
+
+    public void setMaterialPublishedAt(String materialPublishedAt) {
+        this.materialPublishedAt = materialPublishedAt;
+    }
 }
