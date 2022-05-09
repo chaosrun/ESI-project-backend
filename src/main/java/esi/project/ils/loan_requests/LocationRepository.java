@@ -1,4 +1,4 @@
-package esi.project.ils.requests;
+package esi.project.ils.loan_requests;
 
 import java.util.Optional;
 

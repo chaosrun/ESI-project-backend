@@ -1,4 +1,4 @@
-package esi.project.ils.requests;
+package esi.project.ils.loan_requests;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

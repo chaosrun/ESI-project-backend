@@ -1,11 +1,14 @@
 package esi.project.ils.materials;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import esi.project.ils.extension_requests.ExtensionRequest;
+import esi.project.ils.loan_requests.LoanRequest;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -46,6 +49,12 @@ public class Material {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "material", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<LoanRequest> loanRequests;
+
+    @OneToMany(mappedBy = "material", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ExtensionRequest> extensionRequests;
 
     public Material() {
     }
@@ -116,4 +125,21 @@ public class Material {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public Set<LoanRequest> getLoanRequests() {
+        return loanRequests;
+    }
+
+    public void setLoanRequests(Set<LoanRequest> loanRequests) {
+        this.loanRequests = loanRequests;
+    }
+
+    public Set<ExtensionRequest> getExtensionRequests() {
+        return extensionRequests;
+    }
+
+    public void setExtensionRequests(Set<ExtensionRequest> extensionRequests) {
+        this.extensionRequests = extensionRequests;
+    }
+
 }
