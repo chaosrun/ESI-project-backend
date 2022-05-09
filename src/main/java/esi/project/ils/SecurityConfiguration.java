@@ -53,6 +53,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/requests/extension/borrower/**").hasAnyAuthority("BORROWER", "LIBRARIAN")
                 .antMatchers(HttpMethod.GET, "/requests/extension/material/**").hasAuthority("LIBRARIAN")
                 .antMatchers(HttpMethod.GET, "/requests/extension/status/**").hasAuthority("LIBRARIAN")
+                .antMatchers("/user/**").hasAnyAuthority("BORROWER", "LIBRARIAN")
+                .antMatchers("/users/**").hasAuthority("LIBRARIAN")
+                .antMatchers(HttpMethod.POST, "/material/**").hasAuthority("LIBRARIAN")
+                .antMatchers(HttpMethod.PUT, "/material/**").hasAuthority("LIBRARIAN")
+                .antMatchers(HttpMethod.DELETE, "/material/**").hasAuthority("LIBRARIAN")
+                .antMatchers("/reservation/**").hasAuthority("LIBRARIAN")
+                .antMatchers("/reservations/**").hasAuthority("LIBRARIAN")
                 .antMatchers("/").permitAll()
         .and().formLogin().disable();
     }
