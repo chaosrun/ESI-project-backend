@@ -20,7 +20,7 @@ public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
-    @PostMapping("/reservations")
+    @PostMapping("/reservation")
     public ResponseEntity<Reservation> addResponseEntity(@Valid @RequestBody Reservation reservation) {
         System.out.println(reservation.getUser());
         System.out.println(reservation.getMaterial());
