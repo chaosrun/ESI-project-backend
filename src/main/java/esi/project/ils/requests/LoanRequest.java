@@ -8,25 +8,25 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
-@Table(name = "locations")
-public class Location {
+@Table(name = "loan_requests")
+public class LoanRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "location_id")
+    @Column(name = "request_id")
     private int id;
 
     @NotBlank
-    @Column(name = "address")
-    private String address;
+    @Column(name = "start_date")
+    private Date startDate;
 
     @NotBlank
-    @Column(name = "city")
-    private String city;
+    @Column(name = "end_date")
+    private Date endDate;
 
     @NotBlank
-    @Column(name = "zip_code")
-    private String zipCode;
+    @Column(name = "status")
+    private String status;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -38,8 +38,9 @@ public class Location {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @OneToOne(mappedBy = "location")
-    private LoanRequest loan_request;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "location_id")
+    private Location location;
 
     public int getId() {
         return id;
@@ -49,28 +50,28 @@ public class Location {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public String getCity() {
-        return city;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
-    public String getZipCode() {
-        return zipCode;
+    public String getStatus() {
+        return status;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getCreatedAt() {
@@ -89,4 +90,11 @@ public class Location {
         this.updatedAt = updatedAt;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 }
