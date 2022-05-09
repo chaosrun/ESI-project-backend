@@ -51,6 +51,16 @@ public class ErrorHandlingControllerAdvice {
                 error);
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    ErrorMessage resourceNotFoundExceptionHandler(Exception ex) {
+        return new ErrorMessage(
+                HttpStatus.NOT_FOUND.value(),
+                new Date(),
+                ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
