@@ -1,5 +1,6 @@
 package esi.project.ils.requests;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,18 @@ public class LoanRequestService {
 
     public void deleteLoanRequest(int id) {
         loanRequestRepository.deleteById(id);
+    }
+
+    public List<LoanRequest> getLoanRequestsWithUserId(int userId) {
+        return loanRequestRepository.findByUserId(userId);
+    }
+
+    public List<LoanRequest> getLoanRequestsWithMaterialId(int materialId) {
+        return loanRequestRepository.findByMaterialId(materialId);
+    }
+
+    public List<LoanRequest> getLoanRequestsWithStatus(String status) {
+        return loanRequestRepository.findByStatus(status);
     }
 
 }
