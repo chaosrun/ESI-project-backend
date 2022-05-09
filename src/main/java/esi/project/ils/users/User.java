@@ -104,4 +104,14 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
+    public User() {
+    }
+
+    public User(User user) {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.name = user.getName();
+        this.password = user.getPassword();
+        this.role = user.getRole();
+    }
 }
