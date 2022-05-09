@@ -125,3 +125,4 @@ curl "https://esi-project-team-j.herokuapp.com/auth" -u "borrower@example.com:Qd
 - [Spring Boot API response returns repeating nested JSON](https://stackoverflow.com/questions/65817073/spring-boot-api-response-returns-repeating-nested-json)
 - [Spring Boot DTO Example - Entity To DTO Conversion](https://www.javaguides.net/2021/02/spring-boot-dto-example-entity-to-dto.html)
 - [Entity To DTO Conversion for a Spring REST API](https://www.baeldung.com/entity-to-and-from-dto-for-a-java-spring-application)
+- [modelmapper](http://modelmapper.org/getting-started/)

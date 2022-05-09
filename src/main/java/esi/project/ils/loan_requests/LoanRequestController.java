@@ -1,7 +1,9 @@
 package esi.project.ils.loan_requests;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import esi.project.ils.ErrorHandling.ResourceNotFoundException;
 import esi.project.ils.materials.Material;
@@ -88,4 +90,42 @@ public class LoanRequestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Loan request not found with id " + request_id));
     }
 
+    @GetMapping("/requests/loan/borrower/{user_id}")
+    public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByBorrower(@PathVariable int user_id) {
+        List<LoanRequest> loanRequests = loanRequestService.getLoanRequestsWithUserId(user_id);
+
+        if (loanRequests.isEmpty()) {
+            throw new ResourceNotFoundException("No loan requests found for user with id " + user_id);
+        }
+
+        return new ResponseEntity<>(
+                loanRequests.stream().map(r -> modelMapper.map(r, LoanRequestDto.class)).collect(Collectors.toList()),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/requests/loan/material/{material_id}")
+    public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByMaterial(@PathVariable int material_id) {
+        List<LoanRequest> loanRequests = loanRequestService.getLoanRequestsWithMaterialId(material_id);
+
+        if (loanRequests.isEmpty()) {
+            throw new ResourceNotFoundException("No loan requests found for material with id " + material_id);
+        }
+
+        return new ResponseEntity<>(
+                loanRequests.stream().map(r -> modelMapper.map(r, LoanRequestDto.class)).collect(Collectors.toList()),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/requests/loan/status/{status}")
+    public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByBorrower(@PathVariable String status) {
+        List<LoanRequest> loanRequests = loanRequestService.getLoanRequestsWithStatus(status);
+
+        if (loanRequests.isEmpty()) {
+            throw new ResourceNotFoundException("No loan requests found for status " + status);
+        }
+
+        return new ResponseEntity<>(
+                loanRequests.stream().map(r -> modelMapper.map(r, LoanRequestDto.class)).collect(Collectors.toList()),
+                HttpStatus.OK);
+    }
 }
