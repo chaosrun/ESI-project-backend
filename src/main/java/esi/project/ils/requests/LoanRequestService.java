@@ -21,4 +21,8 @@ public class LoanRequestService {
         });
     }
 
+    public void deleteLoanRequest(int id) {
+        loanRequestRepository.deleteById(id);
+    }
+
 }

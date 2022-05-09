@@ -3,6 +3,7 @@ package esi.project.ils.requests;
 import javax.validation.Valid;
 import java.util.Optional;
 
+import esi.project.ils.ErrorHandling.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,13 @@ public class LoanRequestController {
                                                          @RequestBody LoanRequest loanRequest) {
         Optional<LoanRequest> result = loanRequestService.updateLoanRequest(request_id, loanRequest);
         return result.map(request -> new ResponseEntity<>(request, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new ResourceNotFoundException("Loan request not found with id " + request_id));
     }
+
+    @DeleteMapping("/request/loan/{request_id}")
+    public ResponseEntity<LoanRequest> deleteLoanRequest(@PathVariable int request_id) {
+        loanRequestService.deleteLoanRequest(request_id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
