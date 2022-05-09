@@ -122,6 +122,19 @@ public class LoanRequestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Loan request not found with id " + request_id));
     }
 
+    @GetMapping("/requests/loan")
+    public ResponseEntity<List<LoanRequestDto>> getAllLoanRequests() {
+        List<LoanRequest> loanRequests = loanRequestService.getAllLoanRequests();
+
+        if (loanRequests.isEmpty()) {
+            throw new ResourceNotFoundException("No loan requests found");
+        }
+
+        return new ResponseEntity<>(
+                loanRequests.stream().map(r -> modelMapper.map(r, LoanRequestDto.class)).collect(Collectors.toList()),
+                HttpStatus.OK);
+    }
+
     @GetMapping("/requests/loan/borrower/{user_id}")
     public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByBorrower(@PathVariable int user_id,
                                                                           @AuthenticationPrincipal LibUserDetails user) {
