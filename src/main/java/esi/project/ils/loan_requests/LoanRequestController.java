@@ -36,6 +36,24 @@ public class LoanRequestController {
     @Autowired
     private MaterialService materialService;
 
+    public List<LoanRequestDto> getAvailableLoanRequests(List<LoanRequest> loanRequests, User user) {
+        if (loanRequests.isEmpty()) {
+            throw new ResourceNotFoundException("No loan requests found");
+        }
+
+        List<LoanRequest> filteredRequests = loanRequests.stream().filter(
+                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
+                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
+                .collect(Collectors.toList());
+
+        if (filteredRequests.isEmpty()) {
+            throw new ResourceNotFoundException("No loan requests found for your library");
+        }
+
+        return filteredRequests.stream().map(r -> modelMapper.map(r, LoanRequestDto.class))
+                .collect(Collectors.toList());
+    }
+
     public void checkAuthorization(int the_id, LoanRequest loanRequest, LibUserDetails user, String type) {
         Optional<User> createdBy = userService.getUserWithId(user.getId());
 
@@ -147,96 +165,32 @@ public class LoanRequestController {
     @GetMapping("/requests/loan")
     public ResponseEntity<List<LoanRequestDto>> getAllLoanRequests(@AuthenticationPrincipal LibUserDetails user) {
         List<LoanRequest> loanRequests = loanRequestService.getAllLoanRequests();
-
-        if (loanRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No loan requests found");
-        }
-
-        List<LoanRequest> filteredRequests = loanRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
-                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
-                .collect(Collectors.toList());
-
-        if (filteredRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No loan requests found for your library");
-        }
-
-        return new ResponseEntity<>(
-                filteredRequests.stream().map(r -> modelMapper.map(r, LoanRequestDto.class))
-                        .collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<LoanRequestDto> loanRequestDtoList = getAvailableLoanRequests(loanRequests, user);
+        return new ResponseEntity<>(loanRequestDtoList,HttpStatus.OK);
     }
 
     @GetMapping("/requests/loan/borrower/{user_id}")
     public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByBorrower(@PathVariable int user_id,
                                                                           @AuthenticationPrincipal LibUserDetails user) {
         checkAuthorization(user_id, null, user, "GET_BY_BORROWER");
-
         List<LoanRequest> loanRequests = loanRequestService.getLoanRequestsWithUserId(user_id);
-
-        if (loanRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No loan requests found for user with id " + user_id);
-        }
-
-        List<LoanRequest> filteredRequests = loanRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
-                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
-                .collect(Collectors.toList());
-
-        if (filteredRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No loan requests found for your library");
-        }
-
-        return new ResponseEntity<>(
-                filteredRequests.stream().map(r -> modelMapper.map(r, LoanRequestDto.class)).collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<LoanRequestDto> loanRequestDtoList = getAvailableLoanRequests(loanRequests, user);
+        return new ResponseEntity<>(loanRequestDtoList,HttpStatus.OK);
     }
 
     @GetMapping("/requests/loan/material/{material_id}")
     public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByMaterial(@PathVariable int material_id,
                                                                           @AuthenticationPrincipal LibUserDetails user) {
-        Optional<Material> material = materialService.getMaterialWithId(material_id);
-
-        if (material.isEmpty()) {
-            throw new ResourceNotFoundException("No material found with id " + material_id);
-        }
-
-        if (!Objects.equals(material.get().getHomeLibrary(), user.getHomeLibrary())) {
-            throw new AccessDeniedException("You are not authorized to view loan requests for material with id " + material_id);
-        }
-
         List<LoanRequest> loanRequests = loanRequestService.getLoanRequestsWithMaterialId(material_id);
-
-        if (loanRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No loan requests found for material with id " + material_id);
-        }
-
-        return new ResponseEntity<>(
-                loanRequests.stream().map(r -> modelMapper.map(r, LoanRequestDto.class)).collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<LoanRequestDto> loanRequestDtoList = getAvailableLoanRequests(loanRequests, user);
+        return new ResponseEntity<>(loanRequestDtoList,HttpStatus.OK);
     }
 
     @GetMapping("/requests/loan/status/{status}")
     public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByBorrower(@PathVariable String status,
                                                                           @AuthenticationPrincipal LibUserDetails user) {
         List<LoanRequest> loanRequests = loanRequestService.getLoanRequestsWithStatus(status);
-
-        if (loanRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No loan requests found for status " + status);
-        }
-
-        List<LoanRequest> filteredRequests = loanRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
-                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
-                .collect(Collectors.toList());
-
-        if (filteredRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No loan requests found for your library");
-        }
-
-        return new ResponseEntity<>(
-                filteredRequests.stream().map(r -> modelMapper.map(r, LoanRequestDto.class))
-                        .collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<LoanRequestDto> loanRequestDtoList = getAvailableLoanRequests(loanRequests, user);
+        return new ResponseEntity<>(loanRequestDtoList,HttpStatus.OK);
     }
 }

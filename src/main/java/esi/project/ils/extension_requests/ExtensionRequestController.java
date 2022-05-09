@@ -88,6 +88,24 @@ public class ExtensionRequestController {
         }
     }
 
+    public List<ExtensionRequestDto> getAvailableExtensionRequests(List<ExtensionRequest> extensionRequests, User user) {
+        if (extensionRequests.isEmpty()) {
+            throw new ResourceNotFoundException("No extension requests found");
+        }
+
+        List<ExtensionRequest> filteredRequests = extensionRequests.stream().filter(
+                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
+                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
+                .collect(Collectors.toList());
+
+        if (filteredRequests.isEmpty()) {
+            throw new ResourceNotFoundException("No extension requests found for your library");
+        }
+
+        return filteredRequests.stream().map(r -> modelMapper.map(r, ExtensionRequestDto.class))
+                .collect(Collectors.toList());
+    }
+
     @PostMapping("/request/extension")
     public ResponseEntity<ExtensionRequestDto> addExtensionRequest(@Valid @RequestBody ExtensionRequestForm extensionRequestForm,
                                                                    @AuthenticationPrincipal LibUserDetails user) {
@@ -163,95 +181,32 @@ public class ExtensionRequestController {
     @GetMapping("/requests/extension")
     public ResponseEntity<List<ExtensionRequestDto>> getAllExtensionRequests(@AuthenticationPrincipal LibUserDetails user) {
         List<ExtensionRequest> extensionRequests = extensionRequestService.getAllExtensionRequests();
-
-        if (extensionRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No extension requests found");
-        }
-
-        List<ExtensionRequest> filteredRequests = extensionRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
-                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
-                .collect(Collectors.toList());
-
-        if (filteredRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No extension requests found for your library");
-        }
-
-        return new ResponseEntity<>(
-                filteredRequests.stream().map(
-                        r -> modelMapper.map(r, ExtensionRequestDto.class)).collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<ExtensionRequestDto> extensionRequestDtoList = getAvailableExtensionRequests(extensionRequests, user);
+        return new ResponseEntity<>(extensionRequestDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/requests/extension/borrower/{user_id}")
     public ResponseEntity<List<ExtensionRequestDto>> getExtensionRequestsByBorrower(@PathVariable int user_id,
                                                                                     @AuthenticationPrincipal LibUserDetails user) {
         checkAuthorization(user_id, null, user, "GET_BY_BORROWER");
-
         List<ExtensionRequest> extensionRequests = extensionRequestService.getExtensionRequestsWithUserId(user_id);
-
-        if (extensionRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No extension requests found for user with id " + user_id);
-        }
-
-        List<ExtensionRequest> filteredRequests = extensionRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
-                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
-                .collect(Collectors.toList());
-
-        if (filteredRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No extension requests found for your library");
-        }
-
-        return new ResponseEntity<>(
-                filteredRequests.stream().map(r -> modelMapper.map(r, ExtensionRequestDto.class)).collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<ExtensionRequestDto> extensionRequestDtoList = getAvailableExtensionRequests(extensionRequests, user);
+        return new ResponseEntity<>(extensionRequestDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/requests/extension/material/{material_id}")
     public ResponseEntity<List<ExtensionRequestDto>> getExtensionRequestsByMaterial(@PathVariable int material_id,
                                                                                     @AuthenticationPrincipal LibUserDetails user) {
-        Optional<Material> material = materialService.getMaterialWithId(material_id);
-
-        if (material.isEmpty()) {
-            throw new ResourceNotFoundException("No material found with id " + material_id);
-        }
-
-        if (!Objects.equals(material.get().getHomeLibrary(), user.getHomeLibrary())) {
-            throw new AccessDeniedException("You are not authorized to view loan requests for material with id " + material_id);
-        }
-
         List<ExtensionRequest> extensionRequests = extensionRequestService.getExtensionRequestsWithMaterialId(material_id);
-
-        if (extensionRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No extension requests found for material with id " + material_id);
-        }
-
-        return new ResponseEntity<>(
-                extensionRequests.stream().map(r -> modelMapper.map(r, ExtensionRequestDto.class)).collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<ExtensionRequestDto> extensionRequestDtoList = getAvailableExtensionRequests(extensionRequests, user);
+        return new ResponseEntity<>(extensionRequestDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/requests/extension/status/{status}")
     public ResponseEntity<List<ExtensionRequestDto>> getExtensionRequestsByBorrower(@PathVariable String status,
                                                                                     @AuthenticationPrincipal LibUserDetails user) {
         List<ExtensionRequest> extensionRequests = extensionRequestService.getExtensionRequestsWithStatus(status);
-
-        if (extensionRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No extension requests found for status " + status);
-        }
-
-        List<ExtensionRequest> filteredRequests = extensionRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
-                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
-                .collect(Collectors.toList());
-
-        if (filteredRequests.isEmpty()) {
-            throw new ResourceNotFoundException("No extension requests found for your library");
-        }
-
-        return new ResponseEntity<>(
-                filteredRequests.stream().map(r -> modelMapper.map(r, ExtensionRequestDto.class)).collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<ExtensionRequestDto> extensionRequestDtoList = getAvailableExtensionRequests(extensionRequests, user);
+        return new ResponseEntity<>(extensionRequestDtoList, HttpStatus.OK);
     }
 }
