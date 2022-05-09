@@ -23,6 +23,11 @@ public class Material {
 
     @NotBlank
     @NotNull
+    @Column(name = "home_library")
+    private String homeLibrary;
+
+    @NotBlank
+    @NotNull
     @Column(name = "title")
     private String title;
 
@@ -56,18 +61,12 @@ public class Material {
     @OneToMany(mappedBy = "material", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ExtensionRequest> extensionRequests;
 
-    public Material() {
+    public String getHomeLibrary() {
+        return homeLibrary;
     }
 
-    public Material(int id, String title, String author, String callNumber, Date publishedAt, Date createdAt,
-            Date updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.callNumber = callNumber;
-        this.publishedAt = publishedAt;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public void setHomeLibrary(String homeLibrary) {
+        this.homeLibrary = homeLibrary;
     }
 
     public int getId() {

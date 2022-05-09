@@ -29,6 +29,11 @@ public class User {
     private String email;
 
     @NotBlank
+    @NotNull
+    @Column(name = "home_library")
+    private String homeLibrary;
+
+    @NotBlank
     @Column(name = "name")
     private String name;
 
@@ -50,6 +55,14 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    public String getHomeLibrary() {
+        return homeLibrary;
+    }
+
+    public void setHomeLibrary(String homeLibrary) {
+        this.homeLibrary = homeLibrary;
+    }
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<LoanRequest> loanRequests;
