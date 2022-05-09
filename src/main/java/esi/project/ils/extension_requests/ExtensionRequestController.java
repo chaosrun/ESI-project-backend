@@ -1,7 +1,6 @@
 package esi.project.ils.extension_requests;
 
 import esi.project.ils.ErrorHandling.ResourceNotFoundException;
-import esi.project.ils.loan_requests.LoanRequest;
 import esi.project.ils.materials.Material;
 import esi.project.ils.materials.MaterialService;
 import esi.project.ils.reservations.Reservation;
@@ -64,6 +63,12 @@ public class ExtensionRequestController {
 
         if (oldExtensionRequest.isEmpty()) {
             throw new ResourceNotFoundException("Extension request not found with id " + the_id);
+        }
+
+        if (Objects.equals(type, "GET")
+                && Objects.equals(role, "LIBRARIAN")
+                && Objects.equals(oldExtensionRequest.get().getUser().getHomeLibrary(), user.getHomeLibrary())) {
+            return;
         }
 
         if ((Objects.equals(type, "UPDATE")
@@ -164,7 +169,8 @@ public class ExtensionRequestController {
         }
 
         List<ExtensionRequest> filteredRequests = extensionRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary()))
+                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
+                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
                 .collect(Collectors.toList());
 
         if (filteredRequests.isEmpty()) {
@@ -189,7 +195,8 @@ public class ExtensionRequestController {
         }
 
         List<ExtensionRequest> filteredRequests = extensionRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary()))
+                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
+                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
                 .collect(Collectors.toList());
 
         if (filteredRequests.isEmpty()) {
@@ -235,7 +242,8 @@ public class ExtensionRequestController {
         }
 
         List<ExtensionRequest> filteredRequests = extensionRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary()))
+                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
+                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
                 .collect(Collectors.toList());
 
         if (filteredRequests.isEmpty()) {

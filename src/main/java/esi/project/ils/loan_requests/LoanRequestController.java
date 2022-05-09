@@ -61,6 +61,12 @@ public class LoanRequestController {
             throw new ResourceNotFoundException("Loan request not found with id " + the_id);
         }
 
+        if (Objects.equals(type, "GET")
+                && Objects.equals(role, "LIBRARIAN")
+                && Objects.equals(oldLoanRequest.get().getUser().getHomeLibrary(), user.getHomeLibrary())) {
+            return;
+        }
+
         if ((Objects.equals(type, "UPDATE")
                 || Objects.equals(type, "DELETE")
                 || Objects.equals(type, "GET"))
@@ -147,7 +153,8 @@ public class LoanRequestController {
         }
 
         List<LoanRequest> filteredRequests = loanRequests.stream().filter(
-                r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary()))
+                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
+                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
                 .collect(Collectors.toList());
 
         if (filteredRequests.isEmpty()) {
@@ -172,7 +179,8 @@ public class LoanRequestController {
         }
 
         List<LoanRequest> filteredRequests = loanRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary()))
+                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
+                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
                 .collect(Collectors.toList());
 
         if (filteredRequests.isEmpty()) {
@@ -218,7 +226,8 @@ public class LoanRequestController {
         }
 
         List<LoanRequest> filteredRequests = loanRequests.stream().filter(
-                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary()))
+                        r -> Objects.equals(r.getMaterial().getHomeLibrary(), user.getHomeLibrary())
+                                || Objects.equals(r.getUser().getHomeLibrary(), user.getHomeLibrary()))
                 .collect(Collectors.toList());
 
         if (filteredRequests.isEmpty()) {
