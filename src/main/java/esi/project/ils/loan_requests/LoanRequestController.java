@@ -36,6 +36,36 @@ public class LoanRequestController {
     @Autowired
     private MaterialService materialService;
 
+    public void checkAuthorization(int the_id, LoanRequest loanRequest, LibUserDetails user, String type) {
+        Optional<User> createdBy = userService.getUserWithId(user.getId());
+
+        if (createdBy.isEmpty()) {
+            throw new ResourceNotFoundException("User not found with id " + user.getId());
+        }
+
+        String role = createdBy.get().getRole();
+
+        if (Objects.equals(type, "GET_BY_BORROWER")
+                && !Objects.equals(role, "LIBRARIAN")
+                && !(the_id == user.getId())) {
+            throw new AccessDeniedException("You are not allowed to view this loan request");
+        }
+
+        Optional<LoanRequest> oldLoanRequest = loanRequestService.getLoanRequest(the_id);
+
+        if (oldLoanRequest.isEmpty()) {
+            throw new ResourceNotFoundException("Loan request not found with id " + the_id);
+        }
+
+        if (Objects.equals(type, "UPDATE")
+                && !Objects.equals(role, "LIBRARIAN")
+                && !(oldLoanRequest.get().getUser().getId() == user.getId()
+                && oldLoanRequest.get().getStatus().equals("REQUESTED")
+                && loanRequest.getStatus().equals("CANCELLED"))) {
+            throw new AccessDeniedException("You are not allowed to update this loan request");
+        }
+    }
+
     @PostMapping("/request/loan")
     public ResponseEntity<LoanRequestDto> addLoanRequest(@Valid @RequestBody LoanRequestForm loanRequestForm,
                                                          @AuthenticationPrincipal LibUserDetails user) {
@@ -69,48 +99,17 @@ public class LoanRequestController {
                 HttpStatus.CREATED);
     }
 
-    public void checkAuthorization(int request_id, LoanRequest loanRequest, LibUserDetails user) {
-        Optional<LoanRequest> oldLoanRequest = loanRequestService.getLoanRequest(request_id);
-
-        if (oldLoanRequest.isEmpty()) {
-            throw new ResourceNotFoundException("Loan request not found with id " + request_id);
-        }
-
-        Optional<User> createdBy = userService.getUserWithId(user.getId());
-
-        if (createdBy.isEmpty()) {
-            throw new ResourceNotFoundException("User not found with id " + user.getId());
-        }
-
-        String role = createdBy.get().getRole();
-
-        if (loanRequest != null
-                && !Objects.equals(role, "LIBRARIAN")
-                && !(oldLoanRequest.get().getUser().getId() == user.getId()
-                && oldLoanRequest.get().getStatus().equals("REQUESTED")
-                && loanRequest.getStatus().equals("CANCELLED"))) {
-            throw new AccessDeniedException("You are not allowed to update this loan request");
-        }
-
-        if (loanRequest == null
-                && !Objects.equals(role, "LIBRARIAN")) {
-            throw new AccessDeniedException("You are not allowed to delete this loan request");
-        }
-    }
-
     @PutMapping("/request/loan/{request_id}")
     public ResponseEntity<LoanRequestDto> updateLoanRequest(@PathVariable int request_id,
                                                             @RequestBody LoanRequest loanRequest,
                                                             @AuthenticationPrincipal LibUserDetails user) {
-        checkAuthorization(request_id, loanRequest, user);
+        checkAuthorization(request_id, loanRequest, user, "PUT");
         Optional<LoanRequest> newLoanRequest = loanRequestService.updateLoanRequest(request_id, loanRequest);
         return new ResponseEntity<>(modelMapper.map(newLoanRequest, LoanRequestDto.class), HttpStatus.OK);
     }
 
     @DeleteMapping("/request/loan/{request_id}")
-    public ResponseEntity<LoanRequest> deleteLoanRequest(@PathVariable int request_id,
-                                                         @AuthenticationPrincipal LibUserDetails user) {
-        checkAuthorization(request_id, null, user);
+    public ResponseEntity<LoanRequest> deleteLoanRequest(@PathVariable int request_id) {
         loanRequestService.deleteLoanRequest(request_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -124,7 +123,10 @@ public class LoanRequestController {
     }
 
     @GetMapping("/requests/loan/borrower/{user_id}")
-    public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByBorrower(@PathVariable int user_id) {
+    public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByBorrower(@PathVariable int user_id,
+                                                                          @AuthenticationPrincipal LibUserDetails user) {
+        checkAuthorization(user_id, null, user, "GET_BY_BORROWER");
+
         List<LoanRequest> loanRequests = loanRequestService.getLoanRequestsWithUserId(user_id);
 
         if (loanRequests.isEmpty()) {
