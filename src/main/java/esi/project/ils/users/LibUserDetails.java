@@ -46,6 +46,11 @@ public class LibUserDetails extends User implements UserDetails  {
     }
 
     @Override
+    public String getHomeLibrary() {
+        return user.getHomeLibrary();
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }

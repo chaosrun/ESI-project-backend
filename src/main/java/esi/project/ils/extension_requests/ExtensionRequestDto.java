@@ -9,8 +9,10 @@ public class ExtensionRequestDto {
     private String status;
     private Date createdDate;
     private Date updatedDate;
+    private String userHomeLibrary;
     private String userName;
     private String userEmail;
+    private String materialHomeLibrary;
     private String materialTitle;
     private String materialAuthor;
     private String materialCallNumber;
@@ -64,6 +66,14 @@ public class ExtensionRequestDto {
         this.updatedDate = updatedDate;
     }
 
+    public String getUserHomeLibrary() {
+        return userHomeLibrary;
+    }
+
+    public void setUserHomeLibrary(String userHomeLibrary) {
+        this.userHomeLibrary = userHomeLibrary;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -78,6 +88,14 @@ public class ExtensionRequestDto {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getMaterialHomeLibrary() {
+        return materialHomeLibrary;
+    }
+
+    public void setMaterialHomeLibrary(String materialHomeLibrary) {
+        this.materialHomeLibrary = materialHomeLibrary;
     }
 
     public String getMaterialTitle() {
