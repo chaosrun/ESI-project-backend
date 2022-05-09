@@ -30,6 +30,10 @@ public class LoanRequestService {
         loanRequestRepository.deleteById(id);
     }
 
+    public List<LoanRequest> getAllLoanRequests() {
+        return loanRequestRepository.findAll();
+    }
+
     public List<LoanRequest> getLoanRequestsWithUserId(int userId) {
         return loanRequestRepository.findByUserId(userId);
     }

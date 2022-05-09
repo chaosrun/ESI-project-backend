@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import esi.project.ils.extension_requests.ExtensionRequest;
 import esi.project.ils.loan_requests.LoanRequest;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -51,6 +52,9 @@ public class Material {
 
     @OneToMany(mappedBy = "material", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<LoanRequest> loanRequests;
+
+    @OneToMany(mappedBy = "material", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ExtensionRequest> extensionRequests;
 
     public Material() {
     }
@@ -128,6 +132,14 @@ public class Material {
 
     public void setLoanRequests(Set<LoanRequest> loanRequests) {
         this.loanRequests = loanRequests;
+    }
+
+    public Set<ExtensionRequest> getExtensionRequests() {
+        return extensionRequests;
+    }
+
+    public void setExtensionRequests(Set<ExtensionRequest> extensionRequests) {
+        this.extensionRequests = extensionRequests;
     }
 
 }
