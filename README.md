@@ -35,10 +35,10 @@ git checkout -b feature_branch_name
 Please make sure that your feature branch is up to date with the latest changes in main before you create a pull request. You can choose to rebase or merge. If you have a public feature branch (already pushed and will collaborate with others on this feature branch), you may use merge instead, but here we take rebase as an example:
 
 ```bash
-git checkout main
+git checkout dev
 git pull
 git checkout feature_branch_name
-git rebase main
+git rebase dev
 git push
 ```
 
