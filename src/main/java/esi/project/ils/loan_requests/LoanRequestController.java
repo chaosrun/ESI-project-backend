@@ -2,6 +2,7 @@ package esi.project.ils.loan_requests;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,9 +36,39 @@ public class LoanRequestController {
     @Autowired
     private MaterialService materialService;
 
+    public void checkAuthorization(int the_id, LoanRequest loanRequest, LibUserDetails user, String type) {
+        Optional<User> createdBy = userService.getUserWithId(user.getId());
+
+        if (createdBy.isEmpty()) {
+            throw new ResourceNotFoundException("User not found with id " + user.getId());
+        }
+
+        String role = createdBy.get().getRole();
+
+        if (Objects.equals(type, "GET_BY_BORROWER")
+                && !Objects.equals(role, "LIBRARIAN")
+                && !(the_id == user.getId())) {
+            throw new AccessDeniedException("You are not allowed to view this loan request");
+        }
+
+        Optional<LoanRequest> oldLoanRequest = loanRequestService.getLoanRequest(the_id);
+
+        if (oldLoanRequest.isEmpty()) {
+            throw new ResourceNotFoundException("Loan request not found with id " + the_id);
+        }
+
+        if (Objects.equals(type, "UPDATE")
+                && !Objects.equals(role, "LIBRARIAN")
+                && !(oldLoanRequest.get().getUser().getId() == user.getId()
+                && oldLoanRequest.get().getStatus().equals("REQUESTED")
+                && loanRequest.getStatus().equals("CANCELLED"))) {
+            throw new AccessDeniedException("You are not allowed to update this loan request");
+        }
+    }
+
     @PostMapping("/request/loan")
     public ResponseEntity<LoanRequestDto> addLoanRequest(@Valid @RequestBody LoanRequestForm loanRequestForm,
-                                                      @AuthenticationPrincipal LibUserDetails user) {
+                                                         @AuthenticationPrincipal LibUserDetails user) {
         Location newLocation = new Location();
         newLocation.setAddress(loanRequestForm.getAddress());
         newLocation.setCity(loanRequestForm.getCity());
@@ -69,11 +101,11 @@ public class LoanRequestController {
 
     @PutMapping("/request/loan/{request_id}")
     public ResponseEntity<LoanRequestDto> updateLoanRequest(@PathVariable int request_id,
-                                                         @RequestBody LoanRequest loanRequest) {
-        Optional<LoanRequest> result = loanRequestService.updateLoanRequest(request_id, loanRequest);
-        return result.map(
-                request -> new ResponseEntity<>(modelMapper.map(request, LoanRequestDto.class), HttpStatus.OK))
-                .orElseThrow(() -> new ResourceNotFoundException("Loan request not found with id " + request_id));
+                                                            @RequestBody LoanRequest loanRequest,
+                                                            @AuthenticationPrincipal LibUserDetails user) {
+        checkAuthorization(request_id, loanRequest, user, "PUT");
+        Optional<LoanRequest> newLoanRequest = loanRequestService.updateLoanRequest(request_id, loanRequest);
+        return new ResponseEntity<>(modelMapper.map(newLoanRequest, LoanRequestDto.class), HttpStatus.OK);
     }
 
     @DeleteMapping("/request/loan/{request_id}")
@@ -91,7 +123,10 @@ public class LoanRequestController {
     }
 
     @GetMapping("/requests/loan/borrower/{user_id}")
-    public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByBorrower(@PathVariable int user_id) {
+    public ResponseEntity<List<LoanRequestDto>> getLoanRequestsByBorrower(@PathVariable int user_id,
+                                                                          @AuthenticationPrincipal LibUserDetails user) {
+        checkAuthorization(user_id, null, user, "GET_BY_BORROWER");
+
         List<LoanRequest> loanRequests = loanRequestService.getLoanRequestsWithUserId(user_id);
 
         if (loanRequests.isEmpty()) {
