@@ -1,5 +1,6 @@
 package esi.project.ils.requests;
 
+import esi.project.ils.users.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -42,6 +43,10 @@ public class LoanRequest {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private Location location;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
 
     public int getId() {
         return id;
@@ -98,4 +103,13 @@ public class LoanRequest {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }
