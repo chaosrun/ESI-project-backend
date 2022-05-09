@@ -4,11 +4,20 @@ import java.util.Date;
 
 public class LoanRequestForm {
 
+    private int materialId;
     private Date startDate;
     private Date endDate;
     private String address;
     private String city;
     private String zipCode;
+
+    public int getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(int materialId) {
+        this.materialId = materialId;
+    }
 
     public Date getStartDate() {
         return startDate;

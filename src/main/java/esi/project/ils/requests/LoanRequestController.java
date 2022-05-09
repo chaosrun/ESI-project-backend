@@ -4,6 +4,8 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 import esi.project.ils.ErrorHandling.ResourceNotFoundException;
+import esi.project.ils.materials.Material;
+import esi.project.ils.materials.MaterialService;
 import esi.project.ils.users.LibUserDetails;
 import esi.project.ils.users.User;
 import esi.project.ils.users.UserService;
@@ -27,19 +29,28 @@ public class LoanRequestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MaterialService materialService;
+
     @PostMapping("/request/loan")
     public ResponseEntity<LoanRequestDto> addLoanRequest(@Valid @RequestBody LoanRequestForm loanRequestForm,
                                                       @AuthenticationPrincipal LibUserDetails user) {
+        Location newLocation = new Location();
+        newLocation.setAddress(loanRequestForm.getAddress());
+        newLocation.setCity(loanRequestForm.getCity());
+        newLocation.setZipCode(loanRequestForm.getZipCode());
+
         Optional<User> createdBy = userService.getUserWithId(user.getId());
 
         if (createdBy.isEmpty()) {
             throw new ResourceNotFoundException("User not found with id " + user.getId());
         }
 
-        Location newLocation = new Location();
-        newLocation.setAddress(loanRequestForm.getAddress());
-        newLocation.setCity(loanRequestForm.getCity());
-        newLocation.setZipCode(loanRequestForm.getZipCode());
+        Optional<Material> material = materialService.getMaterialWithId(loanRequestForm.getMaterialId());
+
+        if (material.isEmpty()) {
+            throw new ResourceNotFoundException("Material not found with id " + loanRequestForm.getMaterialId());
+        }
 
         LoanRequest newLoanRequest = new LoanRequest();
         newLoanRequest.setStartDate(loanRequestForm.getStartDate());
@@ -47,6 +58,7 @@ public class LoanRequestController {
         newLoanRequest.setStatus("REQUESTED");
         newLoanRequest.setLocation(newLocation);
         newLoanRequest.setUser(createdBy.get());
+        newLoanRequest.setMaterial(material.get());
 
         return new ResponseEntity<>(
                 modelMapper.map(loanRequestService.addLoanRequest(newLoanRequest), LoanRequestDto.class),

@@ -1,5 +1,6 @@
 package esi.project.ils.requests;
 
+import esi.project.ils.materials.Material;
 import esi.project.ils.users.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -47,6 +48,10 @@ public class LoanRequest {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "material_id", referencedColumnName = "material_id")
+    private Material material;
 
     public int getId() {
         return id;
@@ -112,4 +117,11 @@ public class LoanRequest {
         this.user = user;
     }
 
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
 }
