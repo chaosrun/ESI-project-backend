@@ -65,7 +65,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/users/{user_id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/{user_id}")
     public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable String user_id) {
         Optional<User> result = userService.updateUser(Integer.parseInt(user_id), user);
         if (result.isPresent()) {
@@ -80,7 +80,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/user/{email}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/user/email/{email}")
     public ResponseEntity<User> deleteUserByEmail(@PathVariable String email) {
         userService.deleteUserWithEmail(email);
         return new ResponseEntity<>(HttpStatus.OK);
