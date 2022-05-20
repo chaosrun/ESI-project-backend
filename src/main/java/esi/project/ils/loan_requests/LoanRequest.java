@@ -8,10 +8,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 
 @Entity
 @Table(name = "loan_requests")
+@JsonIgnoreProperties(value = { "user", "handler",
+        "hibernateLazyInitializer" }, allowSetters = true)
 public class LoanRequest {
 
     @Id
@@ -49,7 +54,7 @@ public class LoanRequest {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", referencedColumnName = "material_id")
     private Material material;
 
