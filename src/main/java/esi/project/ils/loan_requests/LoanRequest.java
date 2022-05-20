@@ -8,10 +8,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 
 @Entity
 @Table(name = "loan_requests")
+@JsonIgnoreProperties(value = { "user", "handler",
+        "hibernateLazyInitializer" }, allowSetters = true)
 public class LoanRequest {
 
     @Id
