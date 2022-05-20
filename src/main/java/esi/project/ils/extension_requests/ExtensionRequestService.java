@@ -18,7 +18,7 @@ public class ExtensionRequestService {
     public Optional<ExtensionRequest> updateExtensionRequest(int id, ExtensionRequest updatedExtensionRequest) {
         return extensionRepository.findById(id).map(extensionRequest -> {
             extensionRequest.setStatus(updatedExtensionRequest.getStatus());
-            return extensionRequest;
+            return extensionRepository.save(extensionRequest);
         });
     }
 
