@@ -49,7 +49,7 @@ public class LoanRequest {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", referencedColumnName = "material_id")
     private Material material;
 

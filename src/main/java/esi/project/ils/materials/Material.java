@@ -7,6 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import esi.project.ils.extension_requests.ExtensionRequest;
 import esi.project.ils.loan_requests.LoanRequest;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,6 +16,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "materials")
+@JsonIgnoreProperties(value = { "loanRequests", "extensionRequests", "handler",
+        "hibernateLazyInitializer" }, allowSetters = true)
 public class Material {
 
     @Id
