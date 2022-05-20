@@ -45,7 +45,7 @@ public class LoanRequest {
     @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     private Location location;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
