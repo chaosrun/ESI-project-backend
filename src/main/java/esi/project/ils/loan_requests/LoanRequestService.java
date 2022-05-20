@@ -18,7 +18,7 @@ public class LoanRequestService {
     public Optional<LoanRequest> updateLoanRequest(int id, LoanRequest updatedLoanRequest) {
         return loanRequestRepository.findById(id).map(loanRequest -> {
             loanRequest.setStatus(updatedLoanRequest.getStatus());
-            return loanRequest;
+            return loanRequestRepository.save(loanRequest);
         });
     }
 
